@@ -5,6 +5,9 @@ require 'active_support'
 require 'active_resource'
 require 'date'
 require 'digest/sha1'
+require 'pp'
+require 'ap'
+require 'ddp'
 
 class Slide < ActiveResource::Base
 	class Connection < ActiveResource::Connection
@@ -16,6 +19,8 @@ class Slide < ActiveResource::Base
 		end
 	end
 	class Format
+#		include ActiveResource::Formats::XmlFormat
+
 		def extension()
 			'';
 		end
@@ -31,8 +36,8 @@ class Slide < ActiveResource::Base
 		end
 	end
 
-	self.site='https://www.slideshare.net';
-	#self.prefix='/api/2/search_slideshows';
+	self.site   = 'https://www.slideshare.net';
+	self.prefix = '/api/2/search_slideshows';
 	self.format = Format.new;
 
 	class << self
@@ -60,25 +65,24 @@ puts sprintf("apikey=%s", apiKey);
 puts sprintf("hashKey=%s", hc) ;
 
 slides = Slide.find(
-	:all,
+	:one,
 	:from=> '/api/2/search_slideshows',
 	:params=>{
-		'q'=>'slideshare',
-		'page'=>1,
-		'items_per_page'=>16,
-		'lang'=>'ja',
-		'sort'=>'relevance',
-		'upload_date'=>'any',
-		'fileformat'=>'all',
-		'file_type'=>'all',
-		'cc'=>1,
-		'cc_adapt'=>1,
-		'cc_commercial'=>1,
-#		'detailed'=>1,
-#		'get_transcript'=>1,
-		'api_key'=>apiKey,
-		'hash'=>hc,
-		'ts'=>et
+		:q=>'slideshare',
+		:page=>1,
+		:items_per_page=>16,
+		:lang=>'ja',
+		:sort=>'relevance',
+		:upload_date=>'any',
+		:fileformat=>'all',
+		:file_type=>'all',
+		:cc=>1,
+		:cc_adapt=>1,
+		:cc_commercial=>1,
+		:api_key=>apiKey,
+		:hash=>hc,
+		:ts=>et
 	}) ;
 
-puts slides;
+#puts slides.to_s;
+pp slides;
