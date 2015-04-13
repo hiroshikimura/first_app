@@ -37,7 +37,7 @@ class Slide < ActiveResource::Base
 	end
 
 	self.site   = 'https://www.slideshare.net';
-	self.prefix = '/api/2/search_slideshows';
+#	self.prefix = '/api/2/search_slideshows';
 	self.format = Format.new;
 
 	class << self
@@ -58,7 +58,8 @@ end
 t = Time.now;
 et = sprintf("%d", t.to_i );
 apiKey = 'zukiZH3z';
-hc = Digest::SHA1.hexdigest(sprintf("%s%s", apiKey,et));
+secret = 'f62yQkox' ;
+hc = Digest::SHA1.hexdigest(sprintf("%s%s", secret,et));
 
 puts sprintf("EPOC TIME=%s", et);
 puts sprintf("apikey=%s", apiKey);
