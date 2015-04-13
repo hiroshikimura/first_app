@@ -37,7 +37,8 @@ class Slide < ActiveResource::Base
 	end
 
 	self.site   = 'https://www.slideshare.net';
-#	self.prefix = '/api/2/search_slideshows';
+#	self.prefix = '/api/2/search_slideshows?';
+#	self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
 	self.format = Format.new;
 
 	class << self
@@ -55,15 +56,27 @@ class Slide < ActiveResource::Base
 	end
 end
 
-t = Time.now;
-et = sprintf("%d", t.to_i );
 apiKey = 'zukiZH3z';
 secret = 'f62yQkox' ;
-hc = Digest::SHA1.hexdigest(sprintf("%s%s", secret,et));
+
+#t = Time.now;
+#et = sprintf("%d", t.to_i );
+#hc = Digest::SHA1.hexdigest(sprintf("%s%d", secret,t.to_i));
+t = 1428950922;
+hc = '9c943256e64630ce134e653948363252bfd29307'
+
 
 puts sprintf("EPOC TIME=%s", et);
 puts sprintf("apikey=%s", apiKey);
-puts sprintf("hashKey=%s", hc) ;
+puts sprintf("hashKey    =%s", hc) ;
+puts sprintf("digestValue=%s",Digest::SHA1.hexdigest(sprintf("%s%d", secret, t)));
+
+#:from=> '/api/2/search_slideshows',
+#:from=> url,
+#self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
+url = sprintf('/api/2/search_slideshows?q=%s&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=%s&hash=%s&ts=%s', 'slideshare', apiKey, hc, et );
+
+puts url ;
 
 slides = Slide.find(
 	:one,
@@ -86,4 +99,4 @@ slides = Slide.find(
 	}) ;
 
 #puts slides.to_s;
-pp slides;
+#pp slides;
