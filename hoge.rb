@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+# coding: utf-8
 
 require 'rubygems'
 require 'active_support'
@@ -37,8 +37,9 @@ class Slide < ActiveResource::Base
 	end
 
 	self.site   = 'https://www.slideshare.net';
-#	self.prefix = '/api/2/search_slideshows?';
-#	self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
+#	self.prefix = '/api/2/search_slideshows';
+#	self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&
+#	sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
 	self.format = Format.new;
 
 	class << self
@@ -60,43 +61,65 @@ apiKey = 'zukiZH3z';
 secret = 'f62yQkox' ;
 
 #t = Time.now;
-#et = sprintf("%d", t.to_i );
-#hc = Digest::SHA1.hexdigest(sprintf("%s%d", secret,t.to_i));
-t = 1428950922;
-hc = '9c943256e64630ce134e653948363252bfd29307'
+#et = 1428950922;
+et = sprintf("%d", Time.now.to_i );
+#hc = '9c943256e64630ce134e653948363252bfd29307'
+hc = Digest::SHA1.hexdigest(sprintf("%s%d", secret,et));
 
 
 puts sprintf("EPOC TIME=%s", et);
 puts sprintf("apikey=%s", apiKey);
 puts sprintf("hashKey    =%s", hc) ;
-puts sprintf("digestValue=%s",Digest::SHA1.hexdigest(sprintf("%s%d", secret, t)));
+puts sprintf("digestValue=%s",Digest::SHA1.hexdigest(sprintf("%s%d", secret, et)));
 
 #:from=> '/api/2/search_slideshows',
 #:from=> url,
-#self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
-url = sprintf('/api/2/search_slideshows?q=%s&page=1&items_per_page=16&lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=%s&hash=%s&ts=%s', 'slideshare', apiKey, hc, et );
+#self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&
+#lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
+
+url = sprintf('/api/2/search_slideshows?q=%s&page=1&items_per_page=16&lang=**&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=%s&hash=%s&ts=%s', 'slideshare', apiKey, hc, et );
+
+# example
+# www.slideshare.net/api/2/search_slideshows
+#	?q=slideshare
+#	&page=1
+#	&items_per_page=16
+#	&lang=**
+#	&sort=relevance
+#	&upload_date=any
+#	&fileformat=all
+#	&file_type=all
+#	&cc=1
+#	&cc_adapt=1
+#	&cc_commercial=1
+#	&api_key=zukiZH3z
+#	&hash=5af7a32954823eeb575e85f03027cdfc0509addd
+#	&ts=1428969358
+
 
 puts url ;
+slides = Slide.find(:one, :from=>url);
 
-slides = Slide.find(
-	:one,
-	:from=> '/api/2/search_slideshows',
-	:params=>{
-		:q=>'slideshare',
-		:page=>1,
-		:items_per_page=>16,
-		:lang=>'ja',
-		:sort=>'relevance',
-		:upload_date=>'any',
-		:fileformat=>'all',
-		:file_type=>'all',
-		:cc=>1,
-		:cc_adapt=>1,
-		:cc_commercial=>1,
-		:api_key=>apiKey,
-		:hash=>hc,
-		:ts=>et
-	}) ;
+#slides = Slide.find(
+#	:one,
+#	:from=> '/api/2/search_slideshows',
+#	:params=>{
+#		:q=>'slideshare',
+#		:page=>1,
+#		:items_per_page=>16,
+#		:lang=>'ja',
+#		:sort=>'relevance',
+#		:upload_date=>'any',
+#		:fileformat=>'all',
+#		:file_type=>'all',
+#		:cc=>1,
+#		:cc_adapt=>1,
+#		:cc_commercial=>1,
+#		:api_key=>apiKey,
+#		:hash=>hc,
+#		:ts=>et
+#		}
+#	) ;
 
 #puts slides.to_s;
-#pp slides;
+pp slides;
