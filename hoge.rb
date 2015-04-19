@@ -38,8 +38,6 @@ class Slide < ActiveResource::Base
 
 	self.site   = 'https://www.slideshare.net';
 #	self.prefix = '/api/2/search_slideshows';
-#	self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&lang=ja&
-#	sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
 	self.format = Format.new;
 
 	class << self
@@ -57,69 +55,34 @@ class Slide < ActiveResource::Base
 	end
 end
 
+# ハッシュ値計算方法
 apiKey = 'zukiZH3z';
 secret = 'f62yQkox' ;
+epoctime = sprintf("%d", Time.now.to_i );
+hashValue = Digest::SHA1.hexdigest(sprintf("%s%s", secret,epoctime));
 
-#t = Time.now;
-#et = 1428950922;
-et = sprintf("%d", Time.now.to_i );
-#hc = '9c943256e64630ce134e653948363252bfd29307'
-hc = Digest::SHA1.hexdigest(sprintf("%s%d", secret,et));
-
-
-puts sprintf("EPOC TIME=%s", et);
-puts sprintf("apikey=%s", apiKey);
-puts sprintf("hashKey    =%s", hc) ;
-puts sprintf("digestValue=%s",Digest::SHA1.hexdigest(sprintf("%s%d", secret, et)));
-
-#:from=> '/api/2/search_slideshows',
-#:from=> url,
-#self.prefix = '/api/2/search_slideshows?q=:q&page=1&items_per_page=16&
-#lang=ja&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=:api_key&hash=:hash&ts=:ts';
-
-url = sprintf('/api/2/search_slideshows?q=%s&page=1&items_per_page=16&lang=**&sort=relevance&upload_date=any&fileformat=all&file_type=all&cc=1&cc_adapt=1&cc_commercial=1&api_key=%s&hash=%s&ts=%s', 'slideshare', apiKey, hc, et );
-
-# example
-# www.slideshare.net/api/2/search_slideshows
-#	?q=slideshare
-#	&page=1
-#	&items_per_page=16
-#	&lang=**
-#	&sort=relevance
-#	&upload_date=any
-#	&fileformat=all
-#	&file_type=all
-#	&cc=1
-#	&cc_adapt=1
-#	&cc_commercial=1
-#	&api_key=zukiZH3z
-#	&hash=5af7a32954823eeb575e85f03027cdfc0509addd
-#	&ts=1428969358
-
-
-puts url ;
-slides = Slide.find(:one, :from=>url);
-
-#slides = Slide.find(
-#	:one,
-#	:from=> '/api/2/search_slideshows',
-#	:params=>{
-#		:q=>'slideshare',
-#		:page=>1,
-#		:items_per_page=>16,
-#		:lang=>'ja',
-#		:sort=>'relevance',
-#		:upload_date=>'any',
-#		:fileformat=>'all',
-#		:file_type=>'all',
-#		:cc=>1,
-#		:cc_adapt=>1,
-#		:cc_commercial=>1,
-#		:api_key=>apiKey,
-#		:hash=>hc,
-#		:ts=>et
-#		}
-#	) ;
+# API call
+# 出力の XML が array を宣言していないので、one じゃないとダメなんだろうなぁ。。。
+slides = Slide.find(
+	:one,
+	:from=> '/api/2/search_slideshows',
+	:params=>{
+		:q=>'slideshare',	# 検索文字列
+		:page=>1,			# ページ番号
+		:items_per_page=>16,# １ページ中のアイテム数
+		:lang=>'ja',		# 言語(ja:Japanese)
+		:sort=>'relevance',	# データ並び順(relevance/mostviewed/mostdownloaded/latest)
+		:upload_date=>'any',# 直近の更新期間(any/week/month/year)
+		:fileformat=>'all',	# ファイルフォーマット('pdf':PDF,'ppt':PowerPoint,'odp':Open Office,'pps':PowerPoint Slideshow,'pot':PowerPoint template)
+		:file_type=>'all',	# ファイルタイプ(presentations/documents/webinars/videos)
+		:cc=>1,				# Creative Commonsライセンスで配布しているかどうか
+		:cc_adapt=>1,		# Creative Commonsの下で変更を許可しているかどうか
+		:cc_commercial=>1,	# Creative Commonsの下で商用利用を許可しているかどうか
+		:api_key=>apiKey,	# api key
+		:hash=>hashValue,	# ハッシュ
+		:ts=>epoctime		# 現在日時(UNIX秒)
+		}
+	) ;
 
 #puts slides.to_s;
 pp slides;

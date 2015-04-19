@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   devise_for :users
   get 'home/index'
@@ -59,4 +61,11 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  # スライド検索に関すること
+	resources :search
+  #get "search/exec"
+  #get "search/show"
+
+  mount Sidekiq::Web, at: "/sidekiq"
 end
