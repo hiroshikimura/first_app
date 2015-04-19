@@ -9,7 +9,7 @@ require 'pp'
 require 'ap'
 require 'ddp'
 
-class Slide < ActiveResource::Base
+class SlideSource < ActiveResource::Base
 	class Connection < ActiveResource::Connection
 		private
 		def http()
@@ -19,8 +19,6 @@ class Slide < ActiveResource::Base
 		end
 	end
 	class Format
-#		include ActiveResource::Formats::XmlFormat
-
 		def extension()
 			'';
 		end
@@ -56,14 +54,14 @@ class Slide < ActiveResource::Base
 end
 
 # ハッシュ値計算方法
-apiKey = 'zukiZH3z';
-secret = 'f62yQkox' ;
-epoctime = sprintf("%d", Time.now.to_i );
-hashValue = Digest::SHA1.hexdigest(sprintf("%s%s", secret,epoctime));
+#apiKey = 'zukiZH3z';
+#secret = 'f62yQkox' ;
+#epoctime = sprintf("%d", Time.now.to_i );
+#hashValue = Digest::SHA1.hexdigest(sprintf("%s%s", secret,epoctime));
 
 # API call
 # 出力の XML が array を宣言していないので、one じゃないとダメなんだろうなぁ。。。
-slides = Slide.find(
+slides = SlideSource.find(
 	:one,
 	:from=> '/api/2/search_slideshows',
 	:params=>{

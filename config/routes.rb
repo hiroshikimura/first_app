@@ -64,8 +64,6 @@ Rails.application.routes.draw do
 
   # スライド検索に関すること
 	resources :search
-  #get "search/exec"
-  #get "search/show"
 
   mount Sidekiq::Web, at: "/sidekiq"
 end

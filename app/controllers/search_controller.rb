@@ -5,7 +5,7 @@ class SearchController < ApplicationController
   #include models::Search
   #include Search
   #include Sidekiq:Worker
-  #sidekiq_options queue: :slideshare_searchrequest
+  #sidekiq_options queue: :slideshare_query
 
 	def index
 		@req = Search.all
@@ -14,14 +14,15 @@ class SearchController < ApplicationController
 	def new
 		@req = Search.new
 	end
+
 	def create
 		# いったん、ユーザーIDは固定で。
-		exec(1, params[:q], params[:lang] )
+		exec(1, params[:req][:q], params[:req][:lang] )
 		@req = Search.all
 	end
 
 	def exec(userid,q,lang)
-	# 検索依頼
+		# 検索依頼
 		r = Search.new
 		r.users_id = userid
 		r.q = q
@@ -31,6 +32,8 @@ class SearchController < ApplicationController
 		r.save
 
 		@req = r
+
+		SlideshareWorker.perform_async( r.requestid )
 		
 	end
 
