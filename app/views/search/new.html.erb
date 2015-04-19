@@ -1,0 +1,10 @@
+<h1>new search request</h1>
+<p>search slides</p>
+
+<%= form_for(@req) do |f| %>
+<%= f.label :q, "検索キーワード" %>
+<%= f.text_field :q %>
+<%= f.label :lang %>
+<%= f.text_field :lang %>
+<% end %>
+
