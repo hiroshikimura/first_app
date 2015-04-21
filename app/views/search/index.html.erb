@@ -1,5 +1,5 @@
 <h1>Home#show</h1>
-<p>search slide backlog</p>
+<p>bookmark slides</p>
 
 <table>
 <tr>
@@ -7,6 +7,7 @@
 <th>query</th>
 <th>lang</th>
 <th>state</th>
+<th>processed/total</th>
 <th>request_date</th>
 <th>last_update_date</th>
 </tr>
@@ -16,6 +17,7 @@
 <th> <%= req.q %></th>
 <th> <%= req.lang %></th>
 <th> <%= req.state %></th>
+<th> <%= req.process_count %> / <%= req.total_count %></th>
 <th> <%= req.request_date %></th>
 <th> <%= req.last_update_date %></th>
 </tr>
