@@ -1,0 +1,19 @@
+<h1>new search request</h1>
+<p>search slides</p>
+
+<%= form_for :slide, :url => {:action => 'update',:controller =>'slides' } do |f| %>
+<%= hidden_field :f, :requestid %>
+<%= hidden_field :f, :ID %>
+<table>
+	<tr><th>項目名</th><th>値</th></tr>
+	<tr><th>タイトル</th><th><%= text_field :f, :Title %></th></tr>
+	<tr><th>説明</th><th><%= text_field :f, :Description %></th></tr>
+</table>
+<%= f.submit "更新する" %>
+<% end %>
+
+<%= form_for :slide, :url => {:action => 'delete',:controller =>'slides' } do |f| %>
+<%= hidden_field :f, :requestid %>
+<%= hidden_field :f, :ID %>
+<%= f.submit "削除する" %>
+<% end %>

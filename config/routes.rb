@@ -65,6 +65,11 @@ Rails.application.routes.draw do
 	resources :search
 
 	# スライド一覧に関すること
+	# 編集＆削除
+	match 'slides/:requestid/:ID/edit' => 'slides#edit', :via => :get, as: 'edit_slide_info'
+	match 'slides/update' => 'slides#update', :via => :post
+	match 'slides/delete' => 'slides#delete', :via => :post
+
 	resources :slides
 
 	# sidekiqのモニター

@@ -5,6 +5,7 @@ class SlideshareWorker < ApplicationController
 	def perform(id)
 		p 'work: id=' + sprintf('%d',id)
 		req = Search.find(id)
+
 		process req
 	end
 
@@ -46,10 +47,13 @@ class SlideshareWorker < ApplicationController
 															:cc_commercial=>1,		# Creative Commons関連
 															:api_key=>apiKey,			# api key
 															:hash=>hashVar,				# ハッシュ
-															:ts=>epoctime      	 # 現在日時(UNIX秒)
+															:ts=>epoctime					# 現在日時(UNIX秒)
 															}	
 														)
-			p slides.Meta
+			p slides
+
+			# データがない場合は抜ける
+			break unless slides.Slideshow?
 
 			# 件数の初期化、毎回やるのカッコワルイ・・・
 			total = slides.Meta.TotalResults.to_i
@@ -61,35 +65,50 @@ class SlideshareWorker < ApplicationController
 
 			# スライド情報のDBへの登録
 			# データが多いので、ここはしょうがないかなー
-			for s in slides.Slideshow do
+			list = []
+			if slides.Meta.NumResults.to_i > 1 then
+				list = list + slides.Slideshow
+			else
+				list = list + [slides.Slideshow]
+			end
+			for res in list do
 				#p '----------'
 				#p s ;
 
 				whole_cnt = whole_cnt + 1
 
-				Slide.new(
-								requestid:					req.requestid,  # 検索要求に対する結果なので。
-								ID:									s.ID,
-								Title:							s.Title, 
-								Description:				s.Description,
-								Status:							s.Status,
-								URL:								s.URL,
-								ThumbnailURL:				s.ThumbnailURL,
-								ThumbnailSize:			s.ThumbnailSize,
-								ThumbnailSmallURL:	s.ThumbnailSmallURL,
-								Embed:							s.Embed,
-								Created:						s.Created,
-								Updated:						s.Updated,
-								Format:							s.Format,
-								DownloadURL:				if s.Download == '1' then s.DownloadUrl else '' end,
-								SlideshowType:			s.SlideshowType
-							).save
-
+				# すでにある場合は『更新』としたいなぁ。
+				# でも、やるとしたら『古いのはOLDに移動し、新しいもののみ残す』というカタチかな。
+				append(req,res)
 				req.update( state:  2, process_count: whole_cnt , last_update_date: Time.now )
 			end
 
 		end
 		req.update( state:  3 )
+	end
+
+	protected
+	def append(req,res)
+		Slide.new(
+			requestid:          req.requestid,  # 検索要求に対する結果なので。
+			ID:                 res.ID,
+			Title:              res.Title,
+			Description:        res.Description,
+			Status:             res.Status,
+			URL:                res.URL,
+			ThumbnailURL:       res.ThumbnailURL,
+			ThumbnailSize:      res.ThumbnailSize,
+			ThumbnailSmallURL:  res.ThumbnailSmallURL,
+			Embed:              res.Embed,
+			Created:            res.Created,
+			Updated:            res.Updated,
+			Format:             res.Format,
+			DownloadURL:        if res.Download == '1' then res.DownloadUrl else '' end,
+			SlideshowType:      res.SlideshowType,
+			userid:             req.users_id,
+			language:						res.Language
+		).save ;
+
 	end
 
 end
