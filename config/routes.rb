@@ -3,7 +3,6 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :users
   get 'home/index'
-
   get 'home/show'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -65,5 +64,9 @@ Rails.application.routes.draw do
   # スライド検索に関すること
 	resources :search
 
+	# スライド一覧に関すること
+	resources :slides
+
+	# sidekiqのモニター
   mount Sidekiq::Web, at: "/sidekiq"
 end

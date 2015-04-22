@@ -1,0 +1,29 @@
+<h1>Sides#index</h1>
+<p>slide list</p>
+
+<table>
+<tr>
+<th>requestid</th>
+<th>ID</th>
+<th>Title</th>
+<th>Description</th>
+<th>Status</th>
+<th>URL</th>
+<th>DownloadURL</th>
+</tr>
+<% @slides.each do |s| %>
+<tr>
+<th> <%= s.requestid %></th>
+<th> <%= s.ID %></th>
+<th> <%= s.Title %></th>
+<th> <%= s.Description %></th>
+<th> <%= s.Status %></th>
+<th> <%= s.URL %></th>
+<th> <%= s.DownloadURL %></th>
+</tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'new request', new_search_path %>

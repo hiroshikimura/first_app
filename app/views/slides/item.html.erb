@@ -1,0 +1,24 @@
+<h1>SLIDE information</h1>
+<p>slide details</p>
+
+<%= form_for :req, :url => {:action => 'create'} do |f| %>
+<%= f.label :q, "検索キーワード" %>
+<%= f.text_field :q %>
+<%= f.label :lang %>
+<%= f.text_field :lang %>
+<%= f.submit "検索する" %>
+<% end %>
+
+<h1>Sides#index</h1>
+<p>slide list</p>
+
+<table>
+<tr>
+<th>項目名</th>
+<th>実際の値</th>
+</tr>
+</table>
+
+<br />
+
+<%= link_to 'new request', new_search_path %>
