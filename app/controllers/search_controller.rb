@@ -2,13 +2,15 @@
 
 # 検索要求を管理するcontroller
 class SearchController < ApplicationController
+
   #include models::Search
   #include Search
   #include Sidekiq:Worker
   #sidekiq_options queue: :slideshare_query
+  before_action :authenticate_user!
 
 	def index
-		@req = Search.all
+    @req = Search.where(userid: current_user.id);
 	end
 
 	def new
@@ -17,8 +19,8 @@ class SearchController < ApplicationController
 
 	def create
 		# いったん、ユーザーIDは固定で。
-		exec(1, params[:req][:q], params[:req][:lang] )
-		@req = Search.all
+		exec(current_user.id, params[:req][:q], params[:req][:lang] )
+    @req = Search.where(userid: current_user.id);
 	end
 
 	def exec(userid,q,lang)
@@ -39,8 +41,7 @@ class SearchController < ApplicationController
 
   def show
 		# 認証系が機能していないので
-    #@req = Search.where(userid: 1);
-    @req = Search.all;
+    @req = Search.where(userid: current_user.id);
   end
 
 #  def stat(uid,reqid)
