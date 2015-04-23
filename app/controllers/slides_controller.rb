@@ -18,16 +18,17 @@ class SlidesController < ApplicationController
 
 	def	update
 		# 変更アクション
-		@slides = s = mySlideList(current_user.id)
-		s.Description = params[:Description] ;
-		s.Title = params[:Title] ;
-		s.save
+		id = params[:f][:ID];
+		rid = params[:f][:requestid];
+		ti = params[:f][:Title];
+		ds = params[:f][:Description] ;
+		Slide.where(userid: current_user.id, ID: id, requestid: rid ).update_all(Title: ti, Description: ds ) ;
 		redirect_to :action => 'index', :notice => '更新しました'
 	end
 
 	def delete
 		# 削除アクション
-		mySlideDelete(current_user.id, params[:ID], params[:requestid] )
+		mySlideDelete(current_user.id, params[:f][:ID], params[:f][:requestid] )
 		redirect_to :action => 'index', :notice => '削除しました'
 	end
 
@@ -40,12 +41,11 @@ class SlidesController < ApplicationController
 
 	def mySlide(userID,slideID,requestID)
 		# いったん全部
-		list = Slide.where(userid: userID,ID: slideID, requestid: requestID);
-		list
+		return Slide.where(userid: userID,ID: slideID, requestid: requestID).first;
 	end
 
 	def mySlideDelete(userID,slideID,requestID)
-		Slide.where(userid: userid,ID: slideID, requestid: requestID).delete;
+		Slide.where(userid: userID, ID: slideID, requestid: requestID).delete_all;
 	end
 
 end

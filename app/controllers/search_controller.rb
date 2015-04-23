@@ -10,7 +10,7 @@ class SearchController < ApplicationController
   before_action :authenticate_user!
 
 	def index
-    @req = Search.where(userid: current_user.id);
+    @req = Search.where(users_id: current_user.id);
 	end
 
 	def new
@@ -20,7 +20,7 @@ class SearchController < ApplicationController
 	def create
 		# いったん、ユーザーIDは固定で。
 		exec(current_user.id, params[:req][:q], params[:req][:lang] )
-    @req = Search.where(userid: current_user.id);
+    @req = Search.where(users_id: current_user.id);
 	end
 
 	def exec(userid,q,lang)

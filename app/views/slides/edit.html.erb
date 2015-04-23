@@ -2,8 +2,8 @@
 <p>search slides</p>
 
 <%= form_for :slide, :url => {:action => 'update',:controller =>'slides' } do |f| %>
-<%= hidden_field :f, :requestid %>
-<%= hidden_field :f, :ID %>
+<input type="hidden" id="f_requestid" name="f[requestid]" value="<%= @slide.requestid %>" />
+<input type="hidden" id="f_ID" name="f[ID]" value="<%= @slide.ID %>" />
 <table>
 	<tr><th>項目名</th><th>値</th></tr>
 	<tr><th>タイトル</th><th><%= text_field :f, :Title %></th></tr>
@@ -13,7 +13,7 @@
 <% end %>
 
 <%= form_for :slide, :url => {:action => 'delete',:controller =>'slides' } do |f| %>
-<%= hidden_field :f, :requestid %>
-<%= hidden_field :f, :ID %>
+<input type="hidden" id="f_requestid" name="f[requestid]" value="<%= @slide.requestid %>" />
+<input type="hidden" id="f_ID" name="f[ID]" value="<%= @slide.ID %>" />
 <%= f.submit "削除する" %>
 <% end %>
