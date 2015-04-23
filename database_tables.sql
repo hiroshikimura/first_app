@@ -15,28 +15,6 @@ CREATE SCHEMA IF NOT EXISTS `first_app_development` DEFAULT CHARACTER SET utf8 C
 USE `first_app_development` ;
 
 -- -----------------------------------------------------
--- Table `first_app_development`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `first_app_development`.`users` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(45) NOT NULL,
-  `encrypted_password` VARCHAR(45) NOT NULL,
-  `reset_password_token` VARCHAR(45) NULL,
-  `reset_password_send_at` DATETIME NULL,
-  `remember_created_at` DATETIME NULL,
-  `sign_in_count` INT ZEROFILL NOT NULL,
-  `current_sign_in_at` DATETIME NULL,
-  `last_sign_in_at` DATETIME NULL,
-  `current_sign_in_ip` VARCHAR(45) NULL,
-  `last_sign_in_ip` VARCHAR(45) NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `first_app_development`.`searches`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `first_app_development`.`searches` (
@@ -80,6 +58,8 @@ CREATE TABLE IF NOT EXISTS `first_app_development`.`slides` (
   `Format` VARCHAR(45) NOT NULL,
   `DownloadURL` VARCHAR(255) NULL DEFAULT NULL,
   `SlideshowType` VARCHAR(45) NOT NULL,
+  `userid` INT NOT NULL,
+  `language` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`requestid`, `ID`),
   INDEX `fk_slides_searches1_idx` (`requestid` ASC),
   CONSTRAINT `fk_slides_searches1`
