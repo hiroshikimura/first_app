@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.5'
+ruby '2.2.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.10'
@@ -45,6 +45,10 @@ gem 'spring',        group: :development
 # authorization
 gem 'devise'
 
+# redis
+gem 'redis'
+gem 'redis-rails'
+
 # for asynchronous processor
 gem 'sidekiq'
 gem 'sinatra', require: false # for use dashboard
@@ -54,3 +58,11 @@ group :production do
  gem 'pg', '0.15.1'
  gem 'rails_12factor','0.0.2'
 end
+
+group :development, :test do
+  gem 'pry-rails'  # rails console(もしくは、rails c)でirbの代わりにpryを使われる
+  gem 'pry-doc'    # methodを表示
+  gem 'pry-byebug' # デバッグを実施(Ruby 2.0以降で動作する)
+  gem 'pry-stack_explorer' # スタックをたどれる
+end
+

@@ -1,5 +1,5 @@
 module Testing
-class Atmic
+class Atomic
 
   def initialize(key_name)
     @key = key_name
@@ -9,16 +9,26 @@ class Atmic
 
   def test
     (1..100000).each do |i|
-      do_something
+      do_something(@redis_db,@key)
     end
   end
 
-  def do_something
-    val = @redis_db.get(@key)
+  def test2
+    (1..100000).each do |i|
+      @redis_db.watch(@key) do
+        @redis_db.multi
+        do_something(@redis_db,@key)
+        @redis_db.exec
+      end
+    end
+  end
+
+  def do_something(r, k)
+    val = r.get(k)
     val ||= 0
     val = val.to_i + 1
     p "val=#{val}"
-    @redis_db.set(@key,val.to_s)
+    r.set(k,val.to_s)
   end
 end
 end

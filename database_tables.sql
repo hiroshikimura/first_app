@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS `first_app_development`.`slides` (
   `Format` VARCHAR(45) NOT NULL,
   `DownloadURL` VARCHAR(255) NULL DEFAULT NULL,
   `SlideshowType` VARCHAR(45) NOT NULL,
-  `userid` INT NOT NULL,
   `language` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`requestid`, `ID`),
   INDEX `fk_slides_searches1_idx` (`requestid` ASC),
