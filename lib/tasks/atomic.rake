@@ -8,7 +8,7 @@ namespace :atomic do
   end
 
   desc "atomic test task 2"
-  task :pipelined => :environment do
+  task :imploved => :environment do
     p = Testing::Atomic.new('TEST002'.freeze)
     p.test2
   end
