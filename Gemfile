@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.1'
+ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.10'
@@ -48,6 +48,7 @@ gem 'devise'
 # redis
 gem 'redis'
 gem 'redis-rails'
+gem 'redis-objects'
 
 # for asynchronous processor
 gem 'sidekiq'
@@ -55,7 +56,6 @@ gem 'sinatra', require: false # for use dashboard
 
 
 group :production do
- gem 'pg', '0.15.1'
  gem 'rails_12factor','0.0.2'
 end
 
